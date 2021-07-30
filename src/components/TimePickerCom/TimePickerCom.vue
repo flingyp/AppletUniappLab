@@ -1,6 +1,7 @@
 <template>
 	<view class="time-picker-com-box">
 		<view class="current-time-text" @click="openDatePickerPopup">
+			<!-- isSelect 控制选择器默认显示当前时间 -->
 			<text v-if="!isSelect">{{isShowCurrentDate?formateCurrentDate:formateCurrentTime}}</text>
 			<text v-if="isSelect">{{isShowCurrentDate?formatDate:formatTime}}</text>
 		</view>
@@ -12,7 +13,9 @@
 					<view>{{isShowCurrentDate?'选择日期': '选择时间'}}</view>
 					<view @click.stop="confirmDate">确定</view>
 				</view>
-				<picker-view :indicator-style="indicatorStyle" :value="pickerValueList" class="picker-view" v-if="displayPickerView" @change="pickerChange">
+				<!-- 日期选择器 -->
+				<picker-view :indicator-style="indicatorStyle" :value="pickerValueList_date" class="picker-view" v-if="displayPickerView&&isShowCurrentDate"
+				 @change="pickerChange">
 					<picker-view-column>
 						<view class="picker-view-item" v-for="(item,index) in years" :key="index">{{item}}年</view>
 					</picker-view-column>
@@ -21,6 +24,25 @@
 					</picker-view-column>
 					<picker-view-column>
 						<view class="picker-view-item" v-for="(item,index) in days" :key="index">{{item}}日</view>
+					</picker-view-column>
+				</picker-view>
+				<!-- 时间选择器 -->
+				<picker-view :indicator-style="indicatorStyle" :value="pickerValueList_time" class="picker-view" v-if="displayPickerView&&!isShowCurrentDate"
+				 @change="pickerChange">
+					<picker-view-column>
+						<view class="picker-view-item" v-for="(item,index) in years" :key="index">{{item}}年</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="picker-view-item" v-for="(item,index) in months" :key="index">{{item}}月</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="picker-view-item" v-for="(item,index) in days" :key="index">{{item}}日</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="picker-view-item" v-for="(item,index) in times" :key="index">{{item}}时</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="picker-view-item" v-for="(item,index) in minutes" :key="index">{{item}}分</view>
 					</picker-view-column>
 				</picker-view>
 			</view>
@@ -95,7 +117,6 @@
 					}
 				}
 			}
-
 			/**
 			 * 填充月份
 			 * 1. 填充 [1-12]
@@ -117,42 +138,82 @@
 					days.push(i < 10 ? '0' + i : i)
 				}
 			}
+			/**
+			 * 填充小时
+			 */
+			const fillAllTimes = () => {
+				for (let i = 1; i <= 24; i++) {
+					times.push(i < 10 ? '0' + i : i)
+				}
+			}
+			/**
+			 * 填充分钟
+			 */
+			const filleAllMinutes = () => {
+				for (let i = 1; i <= 60; i++) {
+					minutes.push(i < 10 ? '0' + i : i)
+				}
+			}
 
-			let years = []
-			let months = []
-			let days = []
+
+			let years = [] // 年份
+			let months = [] // 月份
+			let days = [] // 日
+			let times = [] // 小时
+			let minutes = [] // 分钟
 			let currentTimeInfo = getCurrentTimeInfo()
-			let pickerValueList = [0, 0, 0]
+			let pickerValueList_date = [0, 0, 0]
+			let pickerValueList_time = [0, 0, 0, 0, 0]
 			fillAllYears()
 			fillAllMonths()
 			fillAllDays(currentTimeInfo.current_year, currentTimeInfo.current_month)
-			
+			fillAllTimes()
+			filleAllMinutes()
+
 			years.forEach((item, index) => {
-				if(item == currentTimeInfo.current_year) {
-					pickerValueList[0] = index
+				if (item == currentTimeInfo.current_year) {
+					pickerValueList_date[0] = index
+					pickerValueList_time[0] = index
 				}
 			})
-			
+
 			months.forEach((item, index) => {
-				if(item == currentTimeInfo.current_month) {
-					pickerValueList[1] = index
+				if (item == currentTimeInfo.current_month) {
+					pickerValueList_date[1] = index
+					pickerValueList_time[1] = index
 				}
 			})
-			
+
 			days.forEach((item, index) => {
-				if(item == currentTimeInfo.current_day) {
-					pickerValueList[2] = index
+				if (item == currentTimeInfo.current_day) {
+					pickerValueList_date[2] = index
+					pickerValueList_time[2] = index
 				}
 			})
-			
+
+			times.forEach((item, index) => {
+				if (item == currentTimeInfo.current_hours) {
+					pickerValueList_time[3] = index
+				}
+			})
+
+			minutes.forEach((item, index) => {
+				if (item == currentTimeInfo.current_minutes) {
+					pickerValueList_time[4] = index
+				}
+			})
+
 			return {
 				indicatorStyle: `height: 50px;`,
 				currentTimeInfo,
 				years,
 				months,
 				days,
-				pickerValueList,
-				displayPickerView: false,
+				times,
+				minutes,
+				pickerValueList_date,
+				pickerValueList_time,
+				displayPickerView: false, // 控制选择器的显示与隐藏
 				selectDateInfo: {},
 				selectTimeInfo: {},
 				isSelect: false, // 是否选择过
@@ -193,10 +254,12 @@
 			console.log('years', this.years)
 			console.log('months', this.months)
 			console.log('days', this.days)
-			console.log('pickerValueList', this.pickerValueList)
+			console.log('pickerValueList_date', this.pickerValueList_date)
+			console.log('times', this.times)
+			console.log('minutes', this.minutes)
 		},
 		mounted() {
-		
+
 		},
 		methods: {
 			/**
@@ -211,33 +274,47 @@
 			 */
 			cancelDatePicerPopup() {
 				this.$refs.timePicerPopup.close()
-				setTimeout(() => {
-					this.displayPickerView = false
-				}, 500)
+				// setTimeout(() => {
+				// 	this.displayPickerView = false
+				// }, 500)
 			},
 			/**
 			 * 选择日期时会触发
 			 */
 			pickerChange(e) {
-				if(e.detail.value[1] != this.pickerValueList[1]) { // 代表改动的月份
+				if (e.detail.value[1] != this.pickerValueList_date[1]) { // 代表改动的月份
 					this.days = []
 					//最后一个参数为0,意为获取year年month月一共多少天
-					let theMonthNums = new Date(this.years[e.detail.value[0]], this.months[e.detail.value[1]], 0).getDate();	
+					let theMonthNums = new Date(this.years[e.detail.value[0]], this.months[e.detail.value[1]], 0).getDate();
 					for (let i = 1; i <= theMonthNums; i++) {
 						this.days.push(i < 10 ? '0' + i : i)
 					}
 					// 强制刷新页面 要根据月份去显示多少天的数量 30天 31天
 					this.$forceUpdate()
 				}
-				this.pickerValueList = e.detail.value
+
 				let pickerListsIndex = e.detail.value
-				let selectDateInfo = {
-					select_year: this.years[pickerListsIndex[0]],
-					select_month: this.months[pickerListsIndex[1]],
-					select_day: this.days[pickerListsIndex[2]],
-					format_date: `${this.years[pickerListsIndex[0]]}-${this.months[pickerListsIndex[1]]}-${this.days[pickerListsIndex[2]]}`
+				if (this.isShowCurrentDate) { // 日期
+					this.pickerValueList_date = e.detail.value
+					let selectDateInfo = {
+						select_year: this.years[pickerListsIndex[0]],
+						select_month: this.months[pickerListsIndex[1]],
+						select_day: this.days[pickerListsIndex[2]],
+						format_date: `${this.years[pickerListsIndex[0]]}-${this.months[pickerListsIndex[1]]}-${this.days[pickerListsIndex[2]]}`
+					}
+					this.selectDateInfo = selectDateInfo
+				} else { // 时间
+					this.pickerValueList_time = e.detail.value
+					let selectTimeInfo = {
+						select_year: this.years[pickerListsIndex[0]],
+						select_month: this.months[pickerListsIndex[1]],
+						select_day: this.days[pickerListsIndex[2]],
+						select_time: this.times[pickerListsIndex[3]],
+						select_minutes: this.minutes[pickerListsIndex[4]],
+						format_time: `${this.years[pickerListsIndex[0]]}-${this.months[pickerListsIndex[1]]}-${this.days[pickerListsIndex[2]]} ${this.times[pickerListsIndex[3]]}:${this.minutes[pickerListsIndex[4]]}`
+					}
+					this.selectTimeInfo = selectTimeInfo
 				}
-				this.selectDateInfo = selectDateInfo
 			},
 			/**
 			 * 点击确定时触发
@@ -245,8 +322,37 @@
 			confirmDate() {
 				this.cancelDatePicerPopup()
 				this.isSelect = true
-				console.log('this.selectDateInfo',this.selectDateInfo)
-				this.formatDate = this.selectDateInfo.format_date 
+				if (this.isShowCurrentDate) {
+					if (Object.keys(this.selectDateInfo).length == 0) {
+						this.formatDate = this.formateCurrentDate
+						let obj = {
+							select_year: this.currentTimeInfo.current_year,
+							select_month: this.currentTimeInfo.current_month,
+							select_day: this.currentTimeInfo.current_day,
+							format_date: this.formateCurrentDate
+						}
+						this.$emit('selectTimeDate', obj)
+					} else {
+						this.formatDate = this.selectDateInfo.format_date
+						this.$emit('selectTimeDate', this.selectDateInfo)
+					}
+				} else {
+					if (Object.keys(this.selectTimeInfo).length == 0) {
+						this.formatTime = this.formateCurrentTime
+						let obj = {
+							select_year: this.currentTimeInfo.current_year,
+							select_month: this.currentTimeInfo.current_month,
+							select_day: this.currentTimeInfo.current_day,
+							select_time: this.currentTimeInfo.current_hours,
+							select_mintues: this.currentTimeInfo.current_minutes,
+							format_date: this.formateCurrentTime
+						}
+						this.$emit('selectTimeDate', obj)
+					} else {
+						this.formatTime = this.selectTimeInfo.format_time
+						this.$emit('selectTimeDate', this.selectTimeInfo)
+					}
+				}
 			}
 		}
 	}

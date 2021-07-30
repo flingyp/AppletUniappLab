@@ -45,6 +45,23 @@ selectTimeInfo: {
 	select_year: "年",
 	select_month: "月"，
 	select_day: "日",
-	format_time: `YYYY-DD-MM` 
+	select_time: "时",
+	select_mintues: "分",
+	format_time: `YYYY-DD-MM TT:DD` 
 }
 ```
+
+TimePickerCom组件
+
+1. 依赖 unPopup组件
+
+2. props
+	1. isShowCurrentDate： true 选择日期的 false选择时间
+	2. minYear 最小年份
+	3. maxYear 最大年份
+	4. maskClick： true 点击遮罩层会关闭选择器  false 点击遮罩层不能关闭选择器
+
+3. 点击确定触发时间  selectTimeDate
+
+
+

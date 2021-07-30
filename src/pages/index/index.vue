@@ -3,6 +3,10 @@
 		<button type="primary" @click="_gopage('/pages/index/savePoster')">保存海报</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/timePicker')">自定义时间选择器</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/swiperSlide')">Swiper滑动</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/animationTest')">小程序动画测试</button>
 	</view>
 </template>
 
@@ -32,7 +36,11 @@
 }
 
 .content > button {
-	background: #007aff;
-	margin: 40rpx 0;
+	width: 300rpx;
+	height: 85rpx;
+	line-height: 85rpx;
+	text-align: center;
+	color: #FFF;
+	margin: 20rpx 0;
 }
 </style>

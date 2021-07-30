@@ -1,6 +1,11 @@
 <template>
 	<view>
-		<time-picker-com></time-picker-com>
+		<view class="time-picker">
+			<time-picker-com  @selectTimeDate="selectTimeDate"></time-picker-com>
+		</view>
+		<view class="time-picker">
+			<time-picker-com :isShowCurrentDate="false" @selectTimeDate="selectTimeDate"></time-picker-com>
+		</view>
 	</view>
 </template>
 
@@ -10,10 +15,17 @@
 		name: 'timePicker',
 		components: {
 			TimePickerCom
+		},
+		methods: {
+			selectTimeDate(time) {
+				console.log('time',time)
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	
+	.time-picker {
+		margin: 20rpx 0;
+	}
 </style>
