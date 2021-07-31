@@ -6,7 +6,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "小程序开发实验室"
+				"navigationBarTitleText": "程序研发室"
 			}
 		},
 		{
@@ -36,7 +36,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "小程序开发实验室",
+		"navigationBarTitleText": "程序研发室",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}

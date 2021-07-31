@@ -13,16 +13,21 @@
 		height: 100rpx;
 		background: #007aff;
 		border-radius: 50%;
-		animation: rightSlide 2s ease forwards;
+		animation: rightSlide 2s linear forwards infinite alternate;
 		position: absolute;
 	}
 	
 	@keyframes rightSlide{
 		0%{
-			transform: translateX(0);
+			transform: translate(0,0);
 		}
-		100%{
-			transform: translateX(300rpx);
+		
+		50% {
+			transform: translate(300rpx, 300rpx);
+		}
+		
+		100% {
+			transform: translate(600rpx, 0rpx);
 		}
 	}
 </style>

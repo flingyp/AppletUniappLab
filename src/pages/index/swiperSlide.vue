@@ -1,14 +1,12 @@
 <template>
 	<view class="swiper-slide-box">
-		<swiper previous-margin='40px' next-margin='40px' @change="change" class="swiper-box">
-			<block v-for="(item,index) in swiperList" :key="index">
+		<swiper previous-margin='30px' next-margin='30px' @change="change" class="swiper-box" :circular="true" autoplay :interval="2000">
+			<block v-for="(item,index) in displayArticlesList" :key="index">
 				<swiper-item>
 					<view class="box" :animation="index == currentIndex?animationData:animationData2">
 						<!-- 内容 -->
 						<!-- 已图片为例 -->
-						<view class="imgcot">
-							<image :src="item.image" mode="widthFix"></image>
-						</view>
+						<image :src="item.image" class="imgcot"></image>
 					</view>
 				</swiper-item>
 			</block>
@@ -20,30 +18,60 @@
 	/**
 	 * 用于解决需要渲染Swiper-item过渡导致卡顿问题 （还未研究）
 	 * https://blog.csdn.net/whoami138/article/details/116246146
+	 * [1,2,3,4,5,6,7,8,9,10]        [1,2,3]
+	 * 向右滑动  [2,3,4]     => 向左滑动 [1,2,3]
+	 * 向左滑动  [10, 1, 2]  => 向右滑动 [1,2,3]
 	 */
 	export default {
 		name: 'swiperSlide',
 		data() {
 			return {
-				swiperList: [{
-					image: 'https://img2.baidu.com/it/u=2504128217,427863609&fm=26&fmt=auto&gp=0.jpg'
-				}, {
-					image: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F6%2F57beb9d1185cb.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630221964&t=5ad4e9726ab1807543381d2d0a93d473',
-				}, {
-					image: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2Fd%2F58a5087da2b5f.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630221964&t=f5b62cc08212ad43b152ac31bacb508e',
+				currentIndex: 0, // 这是当前swiper-item在swiper中的索引
+				index: 0, // 这是当前swiper-item在articlesList中的索引
+				articlesList: [{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKWC4NoCIRKj7AAWFg8c9UZQAAP7rwODL64ABYWb088.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4NoCINRnlAAZG3Rp1bukAAP7rwN3X2wABkb1460.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4Nn-IIpWlAAbG4HgvbeUAAP7rwNqHv0ABsb4685.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKWC4NoKIed2hAAUldFdR8TwAAP7rwPS4k8ABSWM079.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKWC4NoGIMh8bAAT1DY_qk2IAAP7rwOttuYABPUl763.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4Nn-IXo0eAAgZOoCOJbUAAP7rwNbOvkACBlS138.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4NoGIBDxRAAdFGy1DuvcAAP7rwPGdGUAB0Uz741.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4NoGIbzIfAAVvnWUQAQsAAP7rwO4n2kABW-1522.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKmC4NoCIOhwKAAarwwaHZmIAAP7rwOgeVEABqvb240.jpg'
+				},{
+					image: 'https://sjbz-fd.zol-img.com.cn/t_s320x510c5/g6/M00/0A/06/ChMkKWC4NoCIVqa1AAXDofuc10oAAP7rwOQwfoABcO5694.jpg'
 				}],
-				currentIndex: 0,
+				displayArticlesList: [], // 显示的文章
 				animationData: {},
 				animationData2: {}
 			}
 		},
 		onLoad() {
 			this.initialAnimation()
+			this.upDateDisplayList()
 		},
 		methods: {
 			change(e) {
-				this.currentIndex = e.detail.current
+				let current = e.detail.current
+				if(this.currentIndex - current == 2 || this.currentIndex - current == -1) {
+					this.index = this.index + 1 == this.articlesList.length ? 0 : this.index + 1
+					this.currentIndex = this.currentIndex + 1 == 3 ? 0 : this.currentIndex + 1
+					this.upDateDisplayList()
+				} else if(this.currentIndex - current == -2 || this.currentIndex - current == 1){
+					this.index = this.index - 1 == -1 ? this.articlesList.length - 1 : this.index - 1
+					this.currentIndex = this.currentIndex - 1 == -1 ? 2 : this.currentIndex - 1
+					this.upDateDisplayList()
+				}
 			},
+			// 动画效果
 			initialAnimation() {
 				// 放大
 				var animation = uni.createAnimation({
@@ -58,8 +86,18 @@
 					duration: 400,
 					timingFunction: 'ease',
 				})
-				animation2.scale(0.88).step()
+				animation2.scale(0.9).step()
 				this.animationData2 = animation2.export()
+			},
+			// 更新 displayList
+			upDateDisplayList() {
+				let displayList = []
+				displayList[this.currentIndex] = this.articlesList[this.index]
+				displayList[this.currentIndex - 1 == -1 ? 2 : this.currentIndex - 1] = this.articlesList[this.index - 1 == -1 ?
+					this.articlesList.length - 1 : this.index - 1]
+				displayList[this.currentIndex + 1 == 3 ? 0 : this.currentIndex + 1] = this.articlesList[this.index + 1 == this.articlesList
+					.length ? 0 : this.index + 1]
+				this.displayArticlesList = displayList
 			}
 		}
 	}
@@ -67,14 +105,20 @@
 
 <style lang="scss">
 	.swiper-slide-box {
-		margin-top: 100rpx;
+		margin-top: 40rpx;
 	}
 
-	.swiper-box {}
+	.swiper-box {
+		height: 1000rpx;
+	}
+	
+	.box {
+		height: 100%;
+	}
 
 	.imgcot {
-		image {
-			border-radius: 20rpx;
-		}
+		width: 100%;
+		height: 100%;
+		border-radius: 20rpx;
 	}
 </style>
