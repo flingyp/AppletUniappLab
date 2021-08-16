@@ -1,7 +1,7 @@
 <template>
 	<view class="time-picker-com-box">
+		<!-- isSelect 控制选择器默认显示当前时间 -->
 		<view class="current-time-text" @click="openDatePickerPopup">
-			<!-- isSelect 控制选择器默认显示当前时间 -->
 			<text v-if="!isSelect">{{isShowCurrentDate?formateCurrentDate:formateCurrentTime}}</text>
 			<text v-if="isSelect">{{isShowCurrentDate?formatDate:formatTime}}</text>
 		</view>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	import uniPopup from '@/uni-ui/libs/uni-popup/uni-popup.vue'
 
 	export default {
 		name: 'TimePickerCom',
@@ -68,7 +68,9 @@
 			maskClick: { // 禁用点击遮罩关闭
 				type: Boolean,
 				default: true
-			}
+			},
+			maxMonth: [Number, String],
+			maxDay: [Number, String]
 		},
 		data() {
 			/**
@@ -246,17 +248,41 @@
 			}
 		},
 		created() {
-			console.log('currentTimeInfo', this.currentTimeInfo)
-			console.log('minYear', this.minYear)
-			console.log('maxYear', this.maxYear)
-			console.log('_minYear', this._minYear)
-			console.log('_maxYear', this._maxYear)
-			console.log('years', this.years)
-			console.log('months', this.months)
-			console.log('days', this.days)
-			console.log('pickerValueList_date', this.pickerValueList_date)
-			console.log('times', this.times)
-			console.log('minutes', this.minutes)
+			if(this.maxMonth) {
+				this.months = []
+				for(let i=0; i<=this.maxMonth; i++) {
+					this.months.push(i < 10 ? '0' + i : i)
+				}
+				this.months.forEach((item, index) => {
+					if (item == this.currentTimeInfo.current_month) {
+						this.pickerValueList_date[1] = index
+						this.pickerValueList_time[1] = index
+					}
+				})
+			}
+			if(this.maxDay) {
+				this.days = []
+				for(let i=0; i<=this.maxDay; i++) {
+					this.days.push(i < 10 ? '0' + i : i)
+				}
+				this.days.forEach((item, index) => {
+					if (item == this.currentTimeInfo.current_day) {
+						this.pickerValueList_date[2] = index
+						this.pickerValueList_time[2] = index
+					}
+				})
+			}
+			// console.log('currentTimeInfo', this.currentTimeInfo)
+			// console.log('minYear', this.minYear)
+			// console.log('maxYear', this.maxYear)
+			// console.log('_minYear', this._minYear)
+			// console.log('_maxYear', this._maxYear)
+			// console.log('years', this.years)
+			// console.log('months', this.months)
+			// console.log('days', this.days)
+			// console.log('pickerValueList_date', this.pickerValueList_date)
+			// console.log('times', this.times)
+			// console.log('minutes', this.minutes)
 		},
 		mounted() {
 
@@ -363,18 +389,19 @@
 
 	.current-time-text {
 		color: rgb(96, 98, 102);
-		font-size: 30rpx;
+		font-size: 14px;
 	}
 
 	.picker-view-box {
 		background: #FFF;
 
 		&>.picker-view {
-			height: 600rpx;
+			height: 500rpx;
 		}
 	}
 
 	.picker-header-box {
+		font-size: 15px;
 		min-height: 90rpx;
 		display: flex;
 		align-items: center;
@@ -398,5 +425,6 @@
 	.picker-view-item {
 		text-align: center;
 		line-height: 50px;
+		font-size: 16px;
 	}
 </style>
