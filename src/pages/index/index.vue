@@ -2,7 +2,7 @@
 	<view class="content">
 		<button type="primary" @click="_gopage('/pages/index/savePoster')">保存海报</button>
 		
-		<button type="primary" @click="_gopage('/pages/index/timePicker')">自定义时间选择器</button>
+		<button type="primary" @click="_gopage('/pages/index/timePicker')">自定义选择器</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/swiperSlide')">Swiper滑动</button>
 		

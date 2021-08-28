@@ -1,130 +1,100 @@
 <template>
-	<view v-if="showHello" :class="['cover', ani]" @tap.stop="show(false)">
-		<view :class="['bg', 'translateCenter', ani]" @tap.stop="clear">
-			<view class="title">
-				{{title}}
-			</view>
-			<view class="content">
-				<slot />
-			</view>
-			<view class="btn" >
-				<button class="btn-item" type="default" @tap="show(false)">取消</button>
-				<button class="btn-item" type="primary" @tap="confirm">确定</button>
-			</view>
+	<view class="time-picker-box" v-if="isDisplayPicker">
+		<!-- 遮罩层 -->
+		<view :class="['mask-box', maskClass]"></view>
+		<!-- 选择器内容 -->
+		<view :class="['picker-box', pickerClass]" :style="{height: height+'rpx'}">
+			<view @click="close">关闭</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		name: "testPopup",
+		name: 'TimePickerCom',
 		props: {
-			title: {
-				type: String,
-				default: 'title',
-			},
+			height: {
+				type: Number || String,
+				default: 600
+			}
 		},
-		watch: {
-			title(newValue, oldValue) {
-				console.log('title:', newValue, oldValue)
-			},
-		},
-		created(e) {},
-		data(){
+		data() {
 			return {
-				showHello: false,
-				ani: '',
+				isDisplayPicker: false,
+				maskClass: 'mask-box-disable',
+				pickerClass: 'picker-box-bottom-disable'
 			}
 		},
 		methods: {
-			show(b){
-				if(b){
-					this.showHello = true
-					this.$nextTick(() => {
-						setTimeout(() => {
-							this.ani = 'ani'
-						}, 30)
-					})
-				}else{
-					this.ani = ''
-					this.$nextTick(() => {
-						setTimeout(() => {
-							this.showHello = false
-						}, 300)
-					})
-				}
+			open() {
+				this.isDisplayPicker = true
+				this.$nextTick(() => {
+					setTimeout(() => {
+						this.maskClass = 'mask-box-display'
+						this.pickerClass = 'picker-box-bottom-display'
+					}, 30)
+				})
 			},
-			clear(){},
-			confirm(){
-				this.$emit('confirm')
-			},
-		},
+			close() {
+				this.pickerClass = 'picker-box-bottom-disable'
+				this.maskClass = 'mask-box-disable'
+				this.$nextTick(() => {
+					setTimeout(() => {
+						this.isDisplayPicker = false
+					}, 300)
+				})
+			}
+		}
 	}
 </script>
 
-<style>
-@charset "UTF-8";
 
-*{margin:0;padding:0}
-.translateCenter{ position: absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
-.cover{
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 99999;
-	background: rgba(0, 0, 0, .4);
-	opacity: 0;
-	transition: all 2s;
-}
-.cover.ani{
-	opacity: 1;
-}
-.bg{
-	max-height: 3%;
-	width: 3%;
-	opacity: 0;
+<style lang="scss" scoped>
+	.time-picker-box {
+		// 遮罩层
+		.mask-box {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: rgba(0, 0, 0, .5);
+		}
+		.mask-box-disable {
+			opacity: 0;
+			transition: all 0.2s linear;
+		}	
+		.mask-box-display {
+			opacity: 1;
+			transition: all 0.2s linear;
+		}
+		// 弹出层
+		.picker-box {
+			box-sizing: border-box;
+			width: 100%;
+			min-height: 600rpx;
+			background: #FFFFFF;
+			position: absolute;
+			border-top-left-radius: 30rpx;
+			border-top-right-radius: 30rpx;
+			padding: 60rpx 40rpx;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+		}
+		.picker-box-bottom-disable {
+			bottom: 0;
+			opacity: 0;
+			transform: translateY(100%);
+			transition: all 0.2s linear;
+		}
 
-	transition: all .3s;
-}
-.bg.ani{
-	max-height: 80%;
-	width: 80%;
-	opacity: 1;
-
-	display: flex;
-	flex-direction: column;
-	background-color: #FFFFFF;
-
-	border-radius: 16upx;
-	padding: 24upx 24upx;
-	overflow: hidden;
-}
-.content{
-	width: 100%;
-	max-height: 80%;
-	overflow:auto;
-}
-.title{
-	text-align: center;
-	font-size: 38upx;
-}
-.btn{
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-
-	align-items: center;
-	align-content: center;
-
-	vertical-align: middle;
-	margin-top: 40upx;
-	margin-bottom: 20upx;
-	/* background-color: #00CE47; */
-}
-.btn.btn-item{
-	flex: auto;
-	max-width: 40%;
-}
+		.picker-box-bottom-display {
+			bottom: 0;
+			opacity: 1;
+			transform: translateY(0%);
+			transition: all 0.2s linear;
+		}
+	}
+	
 </style>

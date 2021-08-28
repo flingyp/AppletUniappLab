@@ -3,6 +3,9 @@ import App from './App'
 
 Vue.config.productionTip = false
 
+import uView from 'uview-ui'
+Vue.use(uView);
+
 const gopage = (url, type) => {
 	if (url) {
 		if (type === "redirectTo") {
