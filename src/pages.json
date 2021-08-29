@@ -29,6 +29,17 @@
 			"style": {
 				"navigationBarTitleText": "小程序动画效果测试"
 			}
+		},
+		{
+			"path": "pages/index/echarts/echarts",
+			"style": {
+				"navigationBarTitleText": "图表"
+			}
+		},{
+			"path": "pages/index/echarts/lazy-load",
+			"style": {
+				"navigationBarTitleText": "图表"
+			}
 		}
 	],
 	"globalStyle": {
@@ -38,6 +49,7 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"easycom": {
-		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+		"ProgressBar": "@/components/ProgressBar/ProgressBar.vue"
 	}
 }

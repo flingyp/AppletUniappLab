@@ -7,6 +7,8 @@
 		<button type="primary" @click="_gopage('/pages/index/swiperSlide')">Swiper滑动</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/animationTest')">小程序动画测试</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/echarts/echarts')">ECharts图表</button>
 	</view>
 </template>
 
@@ -18,7 +20,6 @@
 			}
 		},
 		onLoad() {
-
 		},
 		methods: {
 			_gopage(url) {

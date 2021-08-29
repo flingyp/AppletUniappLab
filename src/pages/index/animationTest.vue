@@ -1,8 +1,6 @@
 <template>
 	<view>
 		<view class="item-box right-slide"></view>
-
-		<button type="primary" class="primary-btn" @tap="switchMaskPopup">切换</button>
 	</view>
 </template>
 
