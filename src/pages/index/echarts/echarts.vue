@@ -1,26 +1,41 @@
 <template>
 	<view class="echarts-box">
+		<!-- <uni-nav-bar left-icon="back" left-text="返回"  title="导航栏组件" :shadow="true" :statusBar="true" :fixed="true"></uni-nav-bar> -->
+		<u-navbar back-text="返回" title="图表!"></u-navbar>
+		
 		<ProgressBar :progressTitle="'进度条标题'" :progressTotalNum="1000" :progressActiveNum="780"></ProgressBar>
 		<ProgressBar :progressTitle="'进度条标题'" :progressTotalNum="1000" :progressActiveNum="300"></ProgressBar>
 		<ProgressBar :progressTitle="'进度条标题'" :progressTotalNum="1000" :progressActiveNum="500"></ProgressBar>
-		
+
 		<view class="echart-box">
-			<uni-ec-canvas class="uni-ec-canvas" id="line-chart" canvas-id="multi-charts-line" :ec="ec"></uni-ec-canvas>
+			<ec-canvas style="height: 700rpx;" class="uni-ec-canvas" id="pie-chart" canvas-id="multi-charts-pie"
+				:ec="ec4"></ec-canvas>
 		</view>
-		
+
 		<view class="echart-box">
-			<uni-ec-canvas class="uni-ec-canvas" id="pie-chart" canvas-id="multi-charts-pie" :ec="ec2"></uni-ec-canvas>
+			<ec-canvas style="height: 700rpx;" class="uni-ec-canvas" id="line-chart" canvas-id="multi-charts-line"
+				:ec="ec"></ec-canvas>
 		</view>
-		
+
 		<view class="echart-box">
-			<uni-ec-canvas class="uni-ec-canvas" id="line-chart" ref="canvas" canvas-id="lazy-load-chart" :ec="ec3">
-			</uni-ec-canvas>
+			<ec-canvas style="height: 700rpx;" class="uni-ec-canvas" id="pie-chart" canvas-id="multi-charts-pie"
+				:ec="ec2"></ec-canvas>
 		</view>
+
+		<view class="echart-box">
+			<ec-canvas style="height: 700rpx;" class="uni-ec-canvas" id="line-chart" ref="canvas"
+				canvas-id="lazy-load-chart" :ec="ec3">
+			</ec-canvas>
+		</view>
+
+
 	</view>
 </template>
 
 <script>
-	import uniEcCanvas from '@/components/uni-ec-canvas/uni-ec-canvas.vue'
+	import uniEcCanvas from '@/components/ec-canvas/ec-canvas.vue'
+	import * as echarts from '@/components/ec-canvas/echarts.js'
+	let ec4_value = 0.54
 	export default {
 		components: {
 			uniEcCanvas
@@ -183,11 +198,229 @@
 							data: [5, 10, 8, 12, 20, 22, 2]
 						}]
 					}
+				},
+				ec4: {
+					option: {
+						backgroundColor: "#07182e",
+						title: {
+							text: '柱状图',
+							subtext: '纯属虚构',
+							left: 'center',
+							top: '6%',
+							textStyle: {
+								color: '#FFF'
+							}
+						},
+						grid: {
+							right: '5%',
+							left: '5%',
+							top: '5%',
+							bottom: '5%',
+							borderWidth: 1
+						},
+						xAxis: {
+							show: false,
+							type: 'category',
+							data: ['Mon']
+						},
+						yAxis: {
+							show: false,
+							type: 'value'
+						},
+						series: [{
+								name: '压力',
+								center: ['50%', '75%'],
+								detail: {
+									textStyle: {
+										fontSize: 20
+									}
+								},
+								type: "gauge",
+								radius: '70%',
+								min: 0,
+								max: 100,
+								splitNumber: 5,
+								startAngle: 180,
+								endAngle: 0,
+								zlevel: 0,
+								data: [{
+									value: 80,
+									name: '压力(Pa)',
+									itemStyle: {
+										color: '#fff'
+									}
+								}],
+								legend: {
+									padding: 0,
+									margin: 0
+								},
+								pointer: {
+									show: true,
+									length: '70%',
+									radius: '50%',
+									width: 10, //指针粗细
+								},
+								title: { // 仪表盘标题。
+									show: true, // 是否显示标题,默认 true。
+									color: '#FFF',
+									fontSize: 10
+								},
+								markLine: {
+									precision: 2
+								},
+								axisTick: {
+									show: false,
+									splitNumber: 5,
+									lineStyle: {
+										width: 2,
+									},
+									length: -8
+								}, //刻度样式
+								splitLine: {
+									show: true,
+									length: -10,
+									lineStyle: {
+										color: '#233446', //用颜色渐变函数不起作用
+									}
+								}, //分隔线样式
+								axisLabel: {
+									show: true,
+									distance: -20
+								},
+								axisLine: { // 坐标轴线  
+									lineStyle: { // 属性lineStyle控制线条样式  
+										width: 20, // 仪表盘宽度
+										color: [
+											[0.2, '#2ca1ff'],
+											[0.8, '#0adbfa'],
+											[1, '#eaba5f']
+										]
+									}
+								},
+							},
+							{
+								name: "小圆形",
+								center: ['50%', '75%'],
+								type: "pie",
+								hoverAnimation: false,
+								legendHoverLink: false,
+								zlevel: 0,
+								radius: ["0%", "5%"],
+								tooltip: {
+									show: false,
+								},
+								z: 10,
+								label: {
+									normal: {
+										show: false,
+										position: "center",
+									},
+									emphasis: {
+										show: false,
+									},
+								},
+								labelLine: {
+									normal: {
+										show: false,
+									},
+								},
+								data: [{
+									value: 100,
+									name: "2",
+									itemStyle: {
+										normal: {
+											color: "#fff",
+										},
+									},
+								}, ],
+							},
+							{
+								name: "小圆形",
+								center: ['50%', '75%'],
+								type: "pie",
+								hoverAnimation: false,
+								legendHoverLink: false,
+								radius: ["5%", "6%"],
+								tooltip: {
+									show: false,
+								},
+								z: 10,
+								label: {
+									normal: {
+										show: false,
+										position: "center",
+									},
+									emphasis: {
+										show: false,
+									},
+								},
+								labelLine: {
+									normal: {
+										show: false,
+									},
+								},
+								data: [{
+									value: 100,
+									name: "2",
+									itemStyle: {
+										normal: {
+											color: "#08BBED",
+										},
+									},
+								}, ],
+							},
+							{
+								name: "小圆形",
+								center: ['50%', '75%'],
+								type: "pie",
+								hoverAnimation: false,
+								legendHoverLink: false,
+								tooltip: {
+									show: false,
+								},
+								radius: ["6%", "8%"],
+								z: 10,
+								label: {
+									normal: {
+										show: false,
+										position: "center",
+									},
+									emphasis: {
+										show: false,
+									},
+								},
+								labelLine: {
+									normal: {
+										show: false,
+									},
+								},
+								data: [{
+										value: 0,
+										name: "1",
+										itemStyle: {
+											normal: {
+												color: "red",
+											},
+										},
+									},
+									{
+										value: 100,
+										name: "2",
+										itemStyle: {
+											normal: {
+												color: "rgba(0,0,0,0)",
+												borderColor: "red"
+											},
+										},
+									},
+								],
+							},
+						]
+					}
 				}
 			}
 		},
-		onReady() {
-		},
+		onReady() {},
 		methods: {
 			_gopage(url) {
 				this.gopage(url)
@@ -198,18 +431,18 @@
 
 <style lang="scss">
 	.echarts-box {
-		padding: 0 20rpx;
+		// padding: 0 20rpx;
 	}
-	
+
 	.echart-box {
 		width: 100%;
-		margin: 10rpx 0;
+		margin: 10rpx 0 50rpx 0;
 		display: inline-block;
 	}
 
 	.uni-ec-canvas {
 		width: 100%;
-		height: 750rpx;
+		// height: 750rpx;
 		display: block;
 	}
 </style>

@@ -5,6 +5,7 @@
 		<!-- 选择器内容 -->
 		<view :class="['picker-box', pickerClass]" :style="{height: height+'rpx'}">
 			<view @click="close">关闭</view>
+			<slot></slot>		
 		</view>
 	</view>
 </template>

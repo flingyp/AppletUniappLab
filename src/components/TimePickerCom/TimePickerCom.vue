@@ -51,13 +51,13 @@
 </template>
 
 <script>
-	import uniPopup from '@/components/uni-popup/uni-popup.vue'
+	// import uniPopup from '@/components/uni-popup/uni-popup.vue'
 
 	export default {
 		name: 'TimePickerCom',
-		components: {
-			uniPopup
-		},
+		// components: {
+		// 	uniPopup
+		// },
 		props: {
 			isShowCurrentDate: { // true代码选择日期 具体到day。 false代表选择时间 具体到 time
 				type: Boolean,

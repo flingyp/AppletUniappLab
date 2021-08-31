@@ -33,12 +33,23 @@
 		{
 			"path": "pages/index/echarts/echarts",
 			"style": {
-				"navigationBarTitleText": "图表"
+				"navigationBarTitleText": "图表",
+				"navigationStyle":"custom"
 			}
 		},{
 			"path": "pages/index/echarts/lazy-load",
 			"style": {
 				"navigationBarTitleText": "图表"
+			}
+		},{
+			"path":"pages/index/headerNavbar",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},{
+			"path": "pages/index/user/index",
+			"style": {
+				"navigationBarTitleText": "用户登录授权"
 			}
 		}
 	],
@@ -49,7 +60,11 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"easycom": {
-		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
-		"ProgressBar": "@/components/ProgressBar/ProgressBar.vue"
+		"autoscan": true,
+		"custom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+			"^uni-(.*)": "@/uni_modules/uni-$1/components/uni-$1/uni-$1.vue",
+			"ProgressBar": "@/components/ProgressBar/ProgressBar.vue"
+		}
 	}
 }

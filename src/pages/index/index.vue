@@ -9,6 +9,10 @@
 		<button type="primary" @click="_gopage('/pages/index/animationTest')">小程序动画测试</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/echarts/echarts')">ECharts图表</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/headerNavbar')">uView和uni-ui</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/user/index')">用户相关</button>
 	</view>
 </template>
 

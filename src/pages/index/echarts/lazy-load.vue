@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<view class="chart_box">
-			<uni-ec-canvas class="uni-ec-canvas" id="line-chart" ref="canvas" canvas-id="lazy-load-chart" :ec="ec">
-			</uni-ec-canvas>
+			<ec-canvas class="uni-ec-canvas" id="line-chart" ref="canvas" canvas-id="lazy-load-chart" :ec="ec">
+			</ec-canvas>
 		</view>
 	</view>
 </template>
 
 <script>
-	import uniEcCanvas from '@/components/uni-ec-canvas/uni-ec-canvas'
+	import uniEcCanvas from '@/components/ec-canvas/ec-canvas'
 	export default {
 		data() {
 			return {
