@@ -27,7 +27,7 @@
 		{
 			"path": "pages/index/animationTest",
 			"style": {
-				"navigationBarTitleText": "小程序动画效果测试"
+				"navigationBarTitleText": "测试页面"
 			}
 		},
 		{
@@ -49,7 +49,7 @@
 		},{
 			"path": "pages/index/user/index",
 			"style": {
-				"navigationBarTitleText": "用户登录授权"
+				"navigationBarTitleText": "相关API基本测试"
 			}
 		}
 	],

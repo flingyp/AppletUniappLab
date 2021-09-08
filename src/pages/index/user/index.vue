@@ -7,19 +7,22 @@
 		<button type="primary" @click="uniUserInfo">获取用户信息getUserInfo</button>
 
 		<button type="primary" @click="uniUserProfile">获取用户信息getUserProfile</button>
-		
+
 		<button type="primary" @click="uniUserInfo_all">用户信息兼容上面两个</button>
-		
+
 		<!-- open-data的使用 如果只是简单的展示用户信息可以使用 不可以给open-data设置样式 https://developers.weixin.qq.com/community/develop/article/doc/00088683b8c528815c59c62d656013 -->
 		<open-data type="userNickName"></open-data>
 		<view class="openDataAvatarUrl">
 			<open-data type="userAvatarUrl"></open-data>
 		</view>
 		<open-data type="userGender" lang="zh_CN"></open-data>
-		
+
 		<test-popup ref="testPopup">
 			<button type="primary" open-type="getUserInfo" @getuserinfo="setUserAuth">进行授权登录</button>
 		</test-popup>
+
+		<button type="primary" @click="getUserLocation">获取用户位置</button>
+		<button type="primary" @click="selectLocation">选择位置</button>
 	</view>
 </template>
 
@@ -43,8 +46,8 @@
 				// 1. 验证用户有没有授权
 				uni.getSetting({
 					success: async res => {
-						if(res.errMsg === "getSetting:ok") {
-							if(res.authSetting['scope.userInfo']) { // 授权
+						if (res.errMsg === "getSetting:ok") {
+							if (res.authSetting['scope.userInfo']) { // 授权
 								console.log('授权了')
 								// 2. 授权了 就可以获取用户信息
 								await this.getUserInfo(language)
@@ -56,7 +59,7 @@
 						}
 					},
 					fail: err => {
-						console.log('uni.getSetting进入失败回到',err)
+						console.log('uni.getSetting进入失败回到', err)
 					}
 				})
 			},
@@ -67,8 +70,8 @@
 				const language = uni.getSystemInfoSync().language
 				const SDKVersion = await this.getUserWxVersion()
 				const compare_version = await this.compareVersion(SDKVersion, "2.10.4")
-				console.log('compare_version:',compare_version)
-				if(compare_version === 1 || compare_version === 0) { // >= 2.10.4 
+				console.log('compare_version:', compare_version)
+				if (compare_version === 1 || compare_version === 0) { // >= 2.10.4 
 					this.uniUserProfile(language)
 				} else { // < 2.10.4
 					this.uniUserInfo(language)
@@ -128,7 +131,7 @@
 					},
 					fail: err => {
 						console.log('err', err)
-						if(err.errMsg === "getUserProfile:fail auth deny") {
+						if (err.errMsg === "getUserProfile:fail auth deny") {
 							// 提醒用户 小程序需要用户授权
 							uni.showToast({
 								title: '提醒用户 小程序需要用户授权',
@@ -172,11 +175,11 @@
 				return 0;
 			},
 			async setUserAuth(res) {
-				console.log('111111',res)
+				console.log('111111', res)
 				let userInfo = {}
-				if(res.detail.errMsg  === "getUserInfo:ok") { // 允许授权
+				if (res.detail.errMsg === "getUserInfo:ok") { // 允许授权
 					userInfo = res.detail
-				} else if(res.detail.errMsg === "getUserInfo:fail auth deny") { // 拒绝
+				} else if (res.detail.errMsg === "getUserInfo:fail auth deny") { // 拒绝
 					// 提醒用户 小程序需要用户授权
 					uni.showToast({
 						title: '提醒用户 小程序需要用户授权',
@@ -187,6 +190,35 @@
 				}
 				this.$refs.testPopup.close()
 				return userInfo
+			},
+			getUserLocation() {
+				uni.getLocation({
+					success: res => {
+						console.log('uni.getLocation返回的结果：', res)
+					}
+				})
+			},
+			selectLocation() {
+				uni.getLocation({
+					type: 'gcj02',
+					success: res => {
+						console.log('uni.getLocation返回的结果：', res)
+						let {
+							latitude,
+							longitude
+						} = res
+						uni.chooseLocation({
+							latitude,
+							longitude,
+							success: res => {
+								console.log('uni.chooseLocation返回的结果：', res)
+							},
+							fail: err => {
+								console.log('uni.chooseLocation失败的结果：', err)
+							}
+						})
+					}
+				})
 			}
 		}
 	}
@@ -197,7 +229,7 @@
 		width: 50%;
 		margin-bottom: 20rpx;
 	}
-	
+
 	.openDataAvatarUrl {
 		width: 150rpx;
 		height: 150rpx;
