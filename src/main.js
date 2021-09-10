@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import App from './App'
+import {request} from '@/utils/request.js'
 
 Vue.config.productionTip = false
 
 import uView from 'uview-ui'
 Vue.use(uView);
+
+Vue.prototype.$request = request
 
 const gopage = (url, type) => {
 	if (url) {

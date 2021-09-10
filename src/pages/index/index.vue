@@ -23,11 +23,23 @@
 				title: 'Hello'
 			}
 		},
-		onLoad() {
+		async onLoad() {
+			this.getUserData()
+		},
+		async mounted() {
 		},
 		methods: {
 			_gopage(url) {
 				this.gopage(url)
+			},
+			async getUserData() {
+				// https://api.github.com/users/flingyp
+				const res = await this.$request({
+					url: '/users/flingyp',
+					// url: 'https://api.github.com/users/flingyp',
+					isLoading: true,		
+				})
+				console.log('getUserData->',res)
 			}
 		}
 	}
