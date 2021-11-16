@@ -201,6 +201,7 @@
 			 *  @param {String} filePath 图片临时路劲
 			 */
 			posterToPhotosAlbum(filePath) {
+				console.log('filePath',filePath)
 				uni.showLoading({
 					title: '保存中...'
 				})

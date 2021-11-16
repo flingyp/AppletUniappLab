@@ -51,6 +51,16 @@
 			"style": {
 				"navigationBarTitleText": "相关API基本测试"
 			}
+		},{
+			"path": "pages/index/uViewUiTest",
+			"style": {
+				"navigationBarTitleText": "uViewUI源码测试"
+			}
+		},{
+			"path":"pages/index/savePosterTest",
+			"style": {
+				"navigationBarTitleText": "保存海报"
+			}
 		}
 	],
 	"globalStyle": {

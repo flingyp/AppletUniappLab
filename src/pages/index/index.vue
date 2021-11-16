@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<button type="primary" @click="_gopage('/pages/index/savePoster')">保存海报</button>
+		<button type="primary" @click="_gopage('/pages/index/savePosterTest')">保存海报</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/timePicker')">自定义选择器</button>
 		
@@ -13,6 +13,8 @@
 		<button type="primary" @click="_gopage('/pages/index/headerNavbar')">uView和uni-ui</button>
 		
 		<button type="primary" @click="_gopage('/pages/index/user/index')">相关API基本测试</button>
+		
+		<button type="primary" @click="_gopage('/pages/index/uViewUiTest')">uViewUI源码测试</button>
 	</view>
 </template>
 
